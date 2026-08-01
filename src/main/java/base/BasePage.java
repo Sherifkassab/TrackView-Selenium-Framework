@@ -3,8 +3,10 @@ package base;
 import driver.DriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -47,11 +49,41 @@ public class BasePage {
         element.sendKeys(text);
     }
 
+    protected void pressEnter(By locator) {
+        WebElement element = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(locator)
+        );
+        element.sendKeys(Keys.ENTER);
+    }
+
     protected void click(By locator) {
         WebElement element = wait.until(
                 ExpectedConditions.elementToBeClickable(locator)
         );
         element.click();
+    }
+
+    protected void clickByActions(By locator) {
+
+        WebElement element = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(locator)
+        );
+
+        Actions actions = new Actions(driver);
+
+        actions.moveToElement(element)
+                .click()
+                .perform();
+    }
+
+    protected void jsClick(By locator) {
+
+        WebElement element = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(locator)
+        );
+
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].click();", element);
     }
 
     protected String getText(By locator) {
