@@ -1,7 +1,7 @@
 package tests;
 
 import base.BaseTest;
-import flows.LoginFlow;
+import flows.EndToEndFlow;
 import org.testng.annotations.Test;
 
 public class SmokeTest extends BaseTest {
@@ -9,8 +9,7 @@ public class SmokeTest extends BaseTest {
     @Test
     public void loginTest() {
 
-        LoginFlow loginFlow = new LoginFlow();
+        EndToEndFlow endToEndFlow = new EndToEndFlow();
 
-        loginFlow.login();
-    }
+        new EndToEndFlow().execute();    }
 }

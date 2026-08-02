@@ -69,18 +69,19 @@ public class BasePage {
                 ExpectedConditions.visibilityOfElementLocated(locator)
         );
 
-        Actions actions = new Actions(driver);
-
-        actions.moveToElement(element)
+        new Actions(driver)
+                .moveToElement(element)
                 .click()
                 .perform();
     }
 
     protected void jsClick(By locator) {
 
-        WebElement element = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(locator)
+        wait.until(
+                ExpectedConditions.presenceOfElementLocated(locator)
         );
+
+        WebElement element = driver.findElement(locator);
 
         ((JavascriptExecutor) driver)
                 .executeScript("arguments[0].click();", element);
@@ -91,6 +92,13 @@ public class BasePage {
                 ExpectedConditions.visibilityOfElementLocated(locator)
         );
         return element.getText();
+    }
+
+    protected String getAttribute(By locator, String attribute) {
+        WebElement element = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(locator)
+        );
+        return element.getAttribute(attribute);
     }
 
     protected boolean isDisplayed(By locator) {
@@ -104,7 +112,17 @@ public class BasePage {
         }
     }
 
+    protected void waitSpinnerDisappear() {
+
+        wait.until(
+                ExpectedConditions.invisibilityOfElementLocated(
+                        By.id("main-spinner")
+                )
+        );
+    }
+
     public static void waitPageLoad() {
+
         wait.until(webDriver ->
                 ((JavascriptExecutor) webDriver)
                         .executeScript("return document.readyState")

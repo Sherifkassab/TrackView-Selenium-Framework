@@ -3,7 +3,7 @@ package pages;
 import base.BasePage;
 import org.openqa.selenium.By;
 
-public class ObjectiveDetailsPage extends BasePage {
+public class KPIDetailsPage extends BasePage {
 
     private final By lblPageTitle = By.id("HeaderPageTitle");
 
@@ -16,7 +16,7 @@ public class ObjectiveDetailsPage extends BasePage {
     }
 
     public boolean isPageTitleCorrect() {
-        return getPageTitle().equals("Objective Details");
+        return getPageTitle().equals("KPIs Details");
     }
 
     private By tab(String tabId) {
@@ -33,14 +33,10 @@ public class ObjectiveDetailsPage extends BasePage {
 
     public void openAllTabs() {
 
-        clickTab("ObjectivesCycles");
-        clickTab("SubObjectives");
-        clickTab("KPIs");
-        clickTab("OperationalKPIs");
-        clickTab("OKRs");
+        clickTab("KPIsCycles");
+        clickTab("POA");
         clickTab("AdvancedInitiatives");
         clickTab("Projects");
-        clickTab("RelatedStrategies");
         clickTab("Stakeholders");
         clickTab("ExecutiveReports");
         clickTab("Issues");
@@ -51,7 +47,5 @@ public class ObjectiveDetailsPage extends BasePage {
         clickTab("AuditRisks");
         clickTab("CommunicationCenter");
         clickTab("ModificationLogs");
-        clickTab("ContributingEntitites");
-        clickTab("ParticipatingEntities");
     }
 }

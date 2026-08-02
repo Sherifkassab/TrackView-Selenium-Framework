@@ -13,6 +13,18 @@ public class StrategyHubPage extends BasePage {
     private final By strategySearchBox = By.id("strategiesValues-selectized");
     private final By applyButton = By.xpath("//button[normalize-space()='Apply']");
 
+    private final By btnNextPage =
+            By.xpath("//a[@aria-label='Next']");
+
+    private final By lblCurrentPage =
+            By.xpath("//span[contains(@class,'pagination-page-link')]");
+
+    private By strategyNameLocator(String strategyName) {
+        return By.xpath(
+                "//td[@data-label='Strategy Name']//span[@title='" + strategyName + "']"
+        );
+    }
+
     private static final String strategyBaseXpath = "//span[@title='";
     private static final String strategyResultXpath =
             "//div[contains(@class,'option') and normalize-space()='%s']";
@@ -52,6 +64,15 @@ public class StrategyHubPage extends BasePage {
         waitPageLoad();
     }
 
+    public boolean isStrategyExists(String strategyName) {
+
+        try {
+            return byToWeb(strategyNameLocator(strategyName)).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public void openStrategy(String strategyName) {
 
         By locator = By.xpath(
@@ -65,5 +86,51 @@ public class StrategyHubPage extends BasePage {
         strategyLink.click();
 
         waitPageLoad();
+    }
+
+    public void clickNextPage() {
+
+        jsClick(btnNextPage);
+        waitSpinnerDisappear();
+        waitPageLoad();
+    }
+    public int getCurrentPage() {
+
+        return Integer.parseInt(
+                getText(lblCurrentPage).trim()
+        );
+    }
+
+    public void openStrategyFromAllPages(String strategyName) {
+
+        while (true) {
+
+            System.out.println("--------------------------------");
+            System.out.println("Current Page = " + getCurrentPage());
+
+            if (isStrategyExists(strategyName)) {
+
+                System.out.println("Strategy Found : " + strategyName);
+
+                openStrategy(strategyName);
+                return;
+            }
+
+            System.out.println("Strategy Not Found");
+            System.out.println("Going To Next Page");
+
+            int currentPage = getCurrentPage();
+
+            clickNextPage();
+
+            System.out.println("Current Page After Click = " + getCurrentPage());
+
+            if (currentPage == getCurrentPage()) {
+
+                throw new RuntimeException(
+                        "Strategy '" + strategyName + "' was not found."
+                );
+            }
+        }
     }
 }
