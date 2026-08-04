@@ -36,3 +36,14 @@ build/
 
 ### Mac OS ###
 .DS_Store
+# Performance Reports
+reports/*.xlsx
+
+# Screenshots
+reports/*.png
+
+# IntelliJ
+.idea/
+
+# Personal Notes
+*.txt
