@@ -2,9 +2,7 @@ package flows;
 
 import components.LeftMenu;
 import config.ConfigReader;
-import pages.LoginPage;
-import pages.StrategyDetailsPage;
-import pages.StrategyHubPage;
+import pages.*;
 import utils.performance.ExcelReport;
 import utils.performance.PerformanceTracker;
 
@@ -20,8 +18,23 @@ public class PerformanceFlow {
     private final StrategyDetailsPage strategyDetailsPage =
             new StrategyDetailsPage();
 
+    private final ObjectiveHubPage objectiveHubPage =
+            new ObjectiveHubPage();
+
+    private final ObjectiveDetailsPage objectiveDetailsPage =
+            new ObjectiveDetailsPage();
+
     private final PerformanceTracker performance =
             new PerformanceTracker();
+
+    private void measureObjectiveTab(String tabName) {
+
+        performance.start();
+
+        objectiveDetailsPage.clickTab(tabName);
+
+        performance.stop("Objective", tabName);
+    }
 
     public void execute() {
 
@@ -93,6 +106,80 @@ public class PerformanceFlow {
         measureTab("CommunicationCenter");
         measureTab("ModificationLogs");
         measureTab("BSCPerspectives");
+
+        // =========================
+        // Objective Hub
+        // =========================
+
+        leftMenu.expandStrategy();
+
+        performance.start();
+
+        leftMenu.clickObjectiveHub();
+
+        performance.stop("Objective", "Objective Hub");
+
+        if (!objectiveHubPage.isPageDisplayed()) {
+            throw new RuntimeException("Objective Hub page is not displayed.");
+        }
+
+        if (!objectiveHubPage.isPageTitleCorrect()) {
+            throw new RuntimeException("Objective Hub page title is incorrect.");
+        }
+
+        objectiveHubPage.refreshObjectives();
+
+        // =========================
+        // Objective Details
+        // =========================
+
+        performance.start();
+
+        objectiveHubPage.openObjectiveFromAllPages(
+                ConfigReader.getObjectiveName()
+        );
+
+        performance.stop("Objective", "Objective Details");
+
+        if (!objectiveDetailsPage.isPageDisplayed()) {
+
+            throw new RuntimeException(
+                    "Objective Details page is not displayed."
+            );
+        }
+
+        if (!objectiveDetailsPage.isPageTitleCorrect()) {
+
+            throw new RuntimeException(
+                    "Objective Details page title is incorrect."
+            );
+        }
+
+        // =========================
+        // Objective Tabs
+        // =========================
+
+        measureObjectiveTab("ObjectivesCycles");
+        measureObjectiveTab("SubObjectives");
+        measureObjectiveTab("KPIs");
+        measureObjectiveTab("OperationalKPIs");
+        measureObjectiveTab("OKRs");
+        measureObjectiveTab("AdvancedInitiatives");
+        measureObjectiveTab("Projects");
+        measureObjectiveTab("RelatedStrategies");
+        measureObjectiveTab("Stakeholders");
+        measureObjectiveTab("ExecutiveReports");
+        measureObjectiveTab("Issues");
+        measureObjectiveTab("Risks");
+        measureObjectiveTab("BasicActions");
+        measureObjectiveTab("AuditActions");
+        measureObjectiveTab("AuditCorrection");
+        measureObjectiveTab("AuditRisks");
+        measureObjectiveTab("CommunicationCenter");
+        measureObjectiveTab("ModificationLogs");
+        measureObjectiveTab("ContributingEntitites");
+        measureObjectiveTab("ParticipatingEntities");
+
 
         // =========================
         // Excel Report

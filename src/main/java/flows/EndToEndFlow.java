@@ -65,8 +65,8 @@ public class EndToEndFlow {
         loginPage.login();
 
         // =========================
-// Strategy Hub
-// =========================
+        // Strategy Hub
+        // =========================
 
         leftMenu.expandStrategy();
         leftMenu.clickStrategyHub();
@@ -98,8 +98,8 @@ public class EndToEndFlow {
         strategyDetailsPage.openAllTabs();
 
         // =========================
-// Objective Hub
-// =========================
+        // Objective Hub
+        // =========================
 
         leftMenu.expandStrategy();
         leftMenu.clickObjectiveHub();
