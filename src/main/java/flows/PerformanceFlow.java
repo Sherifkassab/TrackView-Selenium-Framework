@@ -24,17 +24,28 @@ public class PerformanceFlow {
     private final ObjectiveDetailsPage objectiveDetailsPage =
             new ObjectiveDetailsPage();
 
-    private final PerformanceTracker performance =
-            new PerformanceTracker();
-
     private void measureObjectiveTab(String tabName) {
 
         performance.start();
-
         objectiveDetailsPage.clickTab(tabName);
-
         performance.stop("Objective", tabName);
     }
+
+    private final KPIHubPage kpiHubPage =
+            new KPIHubPage();
+
+    private final KPIDetailsPage kpiDetailsPage =
+            new KPIDetailsPage();
+
+    private void measureKPITab(String tabName) {
+
+        performance.start();
+        kpiDetailsPage.clickTab(tabName);
+        performance.stop("KPI", tabName);
+    }
+
+    private final PerformanceTracker performance =
+            new PerformanceTracker();
 
     public void execute() {
 
@@ -61,7 +72,6 @@ public class PerformanceFlow {
         if (!strategyHubPage.isPageDisplayed()) {
             throw new RuntimeException("Strategy Hub page is not displayed.");
         }
-
         strategyHubPage.selectDefaultStrategy(
                 ConfigReader.getStrategyName()
         );
@@ -80,11 +90,9 @@ public class PerformanceFlow {
         }
 
         performance.start();
-
         strategyHubPage.openStrategyOnly(
                 ConfigReader.getStrategyName()
         );
-
         performance.stop("Strategy", "Strategy Details");
 
         // =========================
@@ -114,15 +122,12 @@ public class PerformanceFlow {
         leftMenu.expandStrategy();
 
         performance.start();
-
         leftMenu.clickObjectiveHub();
-
         performance.stop("Objective", "Objective Hub");
 
         if (!objectiveHubPage.isPageDisplayed()) {
             throw new RuntimeException("Objective Hub page is not displayed.");
         }
-
         if (!objectiveHubPage.isPageTitleCorrect()) {
             throw new RuntimeException("Objective Hub page title is incorrect.");
         }
@@ -140,16 +145,12 @@ public class PerformanceFlow {
         );
 
         performance.stop("Objective", "Objective Details");
-
         if (!objectiveDetailsPage.isPageDisplayed()) {
-
             throw new RuntimeException(
                     "Objective Details page is not displayed."
             );
         }
-
         if (!objectiveDetailsPage.isPageTitleCorrect()) {
-
             throw new RuntimeException(
                     "Objective Details page title is incorrect."
             );
@@ -180,6 +181,67 @@ public class PerformanceFlow {
         measureObjectiveTab("ContributingEntitites");
         measureObjectiveTab("ParticipatingEntities");
 
+        // =========================
+        // KPI Hub
+        // =========================
+
+        leftMenu.expandStrategy();
+
+        performance.start();
+        leftMenu.clickKPIHub();
+        performance.stop("KPI", "KPI Hub");
+
+        if (!kpiHubPage.isPageDisplayed()) {
+            throw new RuntimeException(
+                    "KPI Hub page is not displayed."
+            );
+        }
+        if (!kpiHubPage.isPageTitleCorrect()) {
+            throw new RuntimeException(
+                    "KPI Hub page title is incorrect."
+            );
+        }
+        kpiHubPage.refreshKPIs();
+
+        // =========================
+        // KPI Details
+        // =========================
+
+        performance.start();
+        kpiHubPage.openKPIFromAllPages(
+                ConfigReader.getKPIName()
+        );
+        performance.stop("KPI", "KPI Details");
+
+        if (!kpiDetailsPage.isPageDisplayed()) {
+            throw new RuntimeException(
+                    "KPI Details page is not displayed."
+            );
+        }
+        if (!kpiDetailsPage.isPageTitleCorrect()) {
+            throw new RuntimeException(
+                    "KPI Details page title is incorrect."
+            );
+        }
+
+        // =========================
+        // KPI Tabs
+        // =========================
+
+        measureKPITab("KPIsCycles");
+        measureKPITab("POA");
+        measureKPITab("AdvancedInitiatives");
+        measureKPITab("Projects");
+        measureKPITab("Stakeholders");
+        measureKPITab("ExecutiveReports");
+        measureKPITab("Issues");
+        measureKPITab("Risks");
+        measureKPITab("BasicActions");
+        measureKPITab("AuditActions");
+        measureKPITab("AuditCorrection");
+        measureKPITab("AuditRisks");
+        measureKPITab("CommunicationCenter");
+        measureKPITab("ModificationLogs");
 
         // =========================
         // Excel Report
@@ -193,9 +255,7 @@ public class PerformanceFlow {
     private void measureTab(String tabName) {
 
         performance.start();
-
         strategyDetailsPage.clickTab(tabName);
-
         performance.stop("Strategy", tabName);
     }
 }
