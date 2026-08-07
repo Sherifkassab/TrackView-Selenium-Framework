@@ -94,6 +94,7 @@ public class StrategyHubPage extends BasePage {
         waitSpinnerDisappear();
         waitPageLoad();
     }
+
     public int getCurrentPage() {
 
         return Integer.parseInt(
@@ -105,25 +106,15 @@ public class StrategyHubPage extends BasePage {
 
         while (true) {
 
-            System.out.println("--------------------------------");
-            System.out.println("Current Page = " + getCurrentPage());
-
             if (isStrategyExists(strategyName)) {
-
-                System.out.println("Strategy Found : " + strategyName);
 
                 openStrategy(strategyName);
                 return;
             }
 
-            System.out.println("Strategy Not Found");
-            System.out.println("Going To Next Page");
-
             int currentPage = getCurrentPage();
 
             clickNextPage();
-
-            System.out.println("Current Page After Click = " + getCurrentPage());
 
             if (currentPage == getCurrentPage()) {
 
@@ -132,5 +123,37 @@ public class StrategyHubPage extends BasePage {
                 );
             }
         }
+    }
+    public boolean moveToStrategyPage(String strategyName) {
+
+        while (true) {
+
+            if (isStrategyExists(strategyName)) {
+                return true;
+            }
+
+            int currentPage = getCurrentPage();
+
+            clickNextPage();
+
+            if (currentPage == getCurrentPage()) {
+                return false;
+            }
+        }
+    }
+    public void openStrategyOnly(String strategyName) {
+
+        By locator = By.xpath(
+                "//td[@data-label='Strategy Name']//a[.//span[@title='" + strategyName + "']]"
+        );
+
+        WebElement strategyLink = wait.until(
+                ExpectedConditions.elementToBeClickable(locator)
+        );
+
+        strategyLink.click();
+
+        waitSpinnerDisappear();
+        waitPageLoad();
     }
 }

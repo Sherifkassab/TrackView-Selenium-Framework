@@ -33,6 +33,7 @@ public class StrategyDetailsPage extends BasePage {
 
     public void openAllTabs() {
 
+        clickTab("Objectives");
         clickTab("KPIs");
         clickTab("OperationalKPIs");
         clickTab("OKRs");

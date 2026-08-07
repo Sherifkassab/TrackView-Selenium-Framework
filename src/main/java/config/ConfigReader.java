@@ -51,4 +51,20 @@ public class ConfigReader {
     public static String getKPIName() {
         return getProperty("kpiName");
     }
+
+    public static String getRelease() {
+        return getProperty("release");
+    }
+
+    public static String getEnvironment() {
+        return getProperty("environment");
+    }
+
+    public static String getTester() {
+        return getProperty("tester");
+    }
+
+    public static String getSystem() {
+        return getProperty("system");
+    }
 }
