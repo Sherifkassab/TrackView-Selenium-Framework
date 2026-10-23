@@ -1,5 +1,5 @@
 
-name: TrackView Windows Live Chrome Test
+name: TrackView Selenium Live Smoke
 
 on:
   workflow_dispatch:
@@ -8,25 +8,22 @@ permissions:
   contents: read
 
 jobs:
-  chrome-test:
-    name: Open Chrome Live
+  selenium-smoke:
+    name: Selenium Smoke - Windows
     runs-on: [self-hosted, Windows, X64]
 
     steps:
-      - name: Open Chrome on Desktop
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Run CI Smoke Test
         shell: cmd
         run: |
-          echo Starting Chrome on PC-SHIKO...
-
-          if exist "%ProgramFiles%\Google\Chrome\Application\chrome.exe" (
-            start "" /wait "%ProgramFiles%\Google\Chrome\Application\chrome.exe" --new-window --user-data-dir="%RUNNER_TEMP%\trackview-chrome-test" about:blank
-          ) else (
-            if exist "%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe" (
-              start "" /wait "%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe" --new-window --user-data-dir="%RUNNER_TEMP%\trackview-chrome-test" about:blank
-            ) else (
-              echo Chrome not found in standard installation folders.
-              exit /b 1
-            )
-          )
-
-          echo Chrome closed successfully.
+          "C:\Program Files\JetBrains\IntelliJ IDEA 2026.2.3\plugins\maven-plugin\lib\maven3\bin\mvn.cmd" -B -Dtest=CISmokeTest test
