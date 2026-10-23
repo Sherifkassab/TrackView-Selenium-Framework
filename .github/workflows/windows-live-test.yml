@@ -1,5 +1,5 @@
 
-name: TrackView Windows Runner Test
+name: TrackView Windows Live Chrome Test
 
 on:
   workflow_dispatch:
@@ -8,15 +8,25 @@ permissions:
   contents: read
 
 jobs:
-  runner-check:
-    name: Check Windows Runner
+  chrome-test:
+    name: Open Chrome Live
     runs-on: [self-hosted, Windows, X64]
 
     steps:
-      - name: Check runner connection
+      - name: Open Chrome on Desktop
         shell: cmd
         run: |
-          echo TrackView Windows Runner is working!
-          echo Computer: %COMPUTERNAME%
-          echo Runner: %RUNNER_NAME%
-          java -version
+          echo Starting Chrome on PC-SHIKO...
+
+          if exist "%ProgramFiles%\Google\Chrome\Application\chrome.exe" (
+            start "" /wait "%ProgramFiles%\Google\Chrome\Application\chrome.exe" --new-window --user-data-dir="%RUNNER_TEMP%\trackview-chrome-test" about:blank
+          ) else (
+            if exist "%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe" (
+              start "" /wait "%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe" --new-window --user-data-dir="%RUNNER_TEMP%\trackview-chrome-test" about:blank
+            ) else (
+              echo Chrome not found in standard installation folders.
+              exit /b 1
+            )
+          )
+
+          echo Chrome closed successfully.
