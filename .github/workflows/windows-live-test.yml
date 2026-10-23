@@ -14,10 +14,9 @@ jobs:
 
     steps:
       - name: Check runner connection
-        shell: powershell
+        shell: cmd
         run: |
-          Write-Host "TrackView Windows Runner is working!"
-          Write-Host "Computer: $env:COMPUTERNAME"
-          Write-Host "Runner: $env:RUNNER_NAME"
-          Write-Host "Java version:"
+          echo TrackView Windows Runner is working!
+          echo Computer: %COMPUTERNAME%
+          echo Runner: %RUNNER_NAME%
           java -version
